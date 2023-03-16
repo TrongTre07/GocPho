@@ -1,7 +1,8 @@
 import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import React from 'react';
 
-const Welcome = () => {
+const Welcome = (props) => {
+  const { navigation } = props;
   return (
     <View style={styles.container}>
       <Image source={require('../../../../media/images/Illustration.png')} />
@@ -16,12 +17,12 @@ const Welcome = () => {
       </View>
 
       {/* Sign Up */}
-      <Pressable style={styles.btnSignUp}>
+      <Pressable style={styles.btnSignUp} onPress={()=> navigation.navigate("SignUp")}>
         <Text style={styles.signUpInsideButton}>Sign Up</Text>
       </Pressable>
 
       {/* Sign In */}
-      <Pressable style={styles.btnSignIn}>
+      <Pressable style={styles.btnSignIn} onPress={()=> navigation.navigate("Login")}>
         <Text style={styles.signInInsideButton}>Sign In</Text>
       </Pressable>
     </View>
