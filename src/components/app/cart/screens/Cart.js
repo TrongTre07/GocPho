@@ -7,71 +7,64 @@ import {
   TextInput,
   FlatList,
   TouchableHighlight,
+  Touchable,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {buyItemSlice} from '../../../../redux-toolkit/reducer_slice/cart_slice/buyItemSlice';
+import {addItem} from '../../../../redux-toolkit/reducer_slice/cart_slice/buyItemSlice';
+import {incrementItemQuantity} from '../../../../redux-toolkit/reducer_slice/cart_slice/buyItemSlice';
+import {decrementItemQuantity} from '../../../../redux-toolkit/reducer_slice/cart_slice/buyItemSlice';
+import {sortListByTotalCost} from '../../../../redux-toolkit/reducer_slice/cart_slice/buyItemSlice';
+import {sortListByName} from '../../../../redux-toolkit/reducer_slice/cart_slice/buyItemSlice';
+import { cloneIncrementItemQuantity } from '../../../../redux-toolkit/reducer_slice/cart_slice/buyItemSlice';
+import {sortListByQuantity} from '../../../../redux-toolkit/reducer_slice/cart_slice/buyItemSlice';
+import SelectDropdown from 'react-native-select-dropdown';
 
-const data = [
-  {
-    id: '1',
-    image: require('../../../../media/images/AppleCart.png'),
-    nameFruit: 'AppleCart',
-    cost: '2.33$',
-    quantity: 1,
-  },
-  {
-    id: '2',
-    image: require('../../../../media/images/AppleCart.png'),
-    nameFruit: 'AppleCart',
-    cost: '2.33$',
-    quantity: 1,
-  },
-  {
-    id: '3',
-    image: require('../../../../media/images/AppleCart.png'),
-    nameFruit: 'Aplkfdgjsldfgjlsfjglfple',
-    cost: '2.33$',
-    quantity: 1,
-  },
-  {
-    id: '4',
-    image: require('../../../../media/images/AppleCart.png'),
-    nameFruit: 'AppleCart',
-    cost: '2.33$',
-    quantity: 1,
-  },
-  {
-    id: '5',
-    image: require('../../../../media/images/AppleCart.png'),
-    nameFruit: 'AppleCart',
-    cost: '2.33$',
-    quantity: 1,
-  },
-  {
-    id: '6',
-    image: require('../../../../media/images/AppleCart.png'),
-    nameFruit: 'AppleCart',
-    cost: '2.33$',
-    quantity: 1,
-  },
-  {
-    id: '7',
-    image: require('../../../../media/images/AppleCart.png'),
-    nameFruit: 'AppleCart',
-    cost: '2.33$',
-    quantity: 1,
-  },
-  {
-    id: '8',
-    image: require('../../../../media/images/AppleCart.png'),
-    nameFruit: 'AppleCart',
-    cost: '2.33$',
-    quantity: 1,
-  },
-];
+const Cart = props => {
+  const listData = useSelector(state => state.buyItem.buyList);
 
-const Cart = () => {
+  const sort = ['Name', 'Total Price', 'Quantity'];
+
+  const {navigation} = props;
+
+  const dispatch = useDispatch();
+
+  const addItemRedux = () => {
+    dispatch(
+      addItem({
+        id: Math.random(),
+        nameFruit: 'AppleCart',
+        image: require('../../../../media/images/AppleCart.png'),
+        cost: '2$',
+        quantity: 1,
+      }),
+    );
+  };
+
+  const handleUpRedux = id => {
+    dispatch(incrementItemQuantity({id}));
+    };
+
+  const handleDownRedux = id => {
+    dispatch(decrementItemQuantity({id}));
+  };
+
+  const sortListByCostRedux = () => {
+    dispatch(sortListByTotalCost());
+  };
+
+  const sortListByNameRedux = () => {
+    dispatch(sortListByName());
+  };
+
+  const sortListByQuantityRedux = () => {
+    dispatch(sortListByQuantity());
+  };
+
   const Item = ({item}) => {
     return (
+      // <Pressable onPress={()=> deleteItem(item.id)}>
       <View style={styles.itemContainer}>
         {/* Image Fruit*/}
         <Image source={item.image} />
@@ -80,26 +73,27 @@ const Cart = () => {
         <View style={styles.nameFruitContainer}>
           <Text style={styles.nameFruit}>{item.nameFruit}</Text>
           <View style={styles.iconContainer}>
-            <TouchableHighlight>
+            <Pressable onPress={() => handleDownRedux(item.id)}>
               <Image
                 style={styles.icon}
                 source={require('../../../../media/images/MinusIcon.png')}
               />
-            </TouchableHighlight>
+            </Pressable>
 
-            <Text style={styles.cost}>1</Text>
-            <TouchableHighlight>
+            <Text style={styles.cost}>{item.quantity}</Text>
+            <Pressable onPress={() => handleUpRedux(item.id)}>
               <Image
                 style={styles.icon}
                 source={require('../../../../media/images/PlusIcon.png')}
               />
-            </TouchableHighlight>
+            </Pressable>
           </View>
         </View>
 
         {/* Cost */}
-        <Text style={styles.cost}>{item.cost}</Text>
+        <Text style={styles.cost}>{item.cost * item.quantity} $</Text>
       </View>
+      // </Pressable>
     );
   };
 
@@ -113,16 +107,64 @@ const Cart = () => {
         <Text style={styles.cart}>Cart</Text>
       </View>
 
+      <View style={styles.selectDropdown}>
+        <SelectDropdown
+          data={sort}
+          buttonStyle={{
+            backgroundColor: '#AC7253',
+            width: 120,
+            height: 40,
+            borderRadius: 20,
+          }}
+          buttonTextStyle={{
+            color: 'white',
+            fontSize: 16,
+            fontWeight: '700',
+            lineHeight: 22,
+          }}
+          dropdownStyle={{}}
+          rowStyle={{
+            borderWidth: 1,
+            backgroundColor: '#00FF4A',
+            borderColor: 'black',
+          }}
+          rowTextStyle={{
+            fontSize: 16,
+            fontWeight: '700',
+            lineHeight: 22,
+            color: 'black',
+          }}
+          onSelect={(selectedItem, index) => {
+            if (selectedItem == 'Name') {
+              sortListByNameRedux();
+            } else if (selectedItem == 'Total Price') {
+              sortListByCostRedux();
+            } else {
+              sortListByQuantityRedux();
+            }
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem;
+          }}
+          rowTextForSelection={(item, index) => {
+            return item;
+          }}
+          defaultButtonText={'Sort'}
+        />
+      </View>
+
       {/* Flatlist */}
       <FlatList
-        data={data}
+        data={listData}
         renderItem={({item}) => <Item item={item} />}
         keyExtractor={item => item.id}
         style={styles.flatlist}
         showsVerticalScrollIndicator={false}
       />
 
-      <Pressable style={styles.btnSignUp}>
+      <Pressable
+        style={styles.btnSignUp}
+        onPress={() => navigation.navigate('Payment')}>
         <Text style={styles.signUpInsideButton}>CheckOut</Text>
       </Pressable>
     </View>
@@ -132,9 +174,13 @@ const Cart = () => {
 export default Cart;
 
 const styles = StyleSheet.create({
+  selectDropdown: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
   flatlist: {
-    height: '70%',
-    marginVertical: 30,
+    height: 600,
+    marginVertical: 5,
   },
   nameFruitContainer: {
     flexDirection: 'column',
@@ -197,6 +243,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
+    backgroundColor: 'white',
     padding: 20,
   },
 });

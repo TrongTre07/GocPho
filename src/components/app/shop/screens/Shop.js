@@ -2,22 +2,21 @@ import { View, Text, StyleSheet, Image, TextInput, Pressable, FlatList, Touchabl
 import React from 'react'
 
 
-const Shop = () => {
-
+const Shop = (props) => {
+    const { navigation } = props;
     const renderItem = ({ item }) => {
         // const item= props;
         const { _name, image, _background, _id } = item;
         return (
             <TouchableOpacity
                 style={Styles.card}
-            // onPress={() => navigation.navigate('Detail', {id: _id}
-            //     )}
+                onPress={() => navigation.navigate("Mango")
+                }
             >
                 <View style={[Styles.imgCard]}>
                     <ImageBackground style={Styles.imgCardBackground} source={_background}>
                         <Image
                             source={image}
-                            style={{ width: 66, height: 83 }}
                         >
                         </Image>
                     </ImageBackground>
@@ -36,22 +35,25 @@ const Shop = () => {
         // const item= props;
         const { __id, image, price, kg } = item;
         return (
-            <View style={[Styles.boxShadown, Styles.cardPopular]}>
-                <View style={{ margin: 10 }}>
-                    <View style={Styles.imgPop}>
-                        <Image source={require('../../../../media/images/apple.png')} />
-                    </View>
-                    <View style={{ height: '40%', position: 'relative' }}>
-                        <Text style={Styles.txtNamePop}>Red Apple</Text>
-                        <Text style={Styles.txtKg}>1kg,priceg</Text>
-                        <Text style={Styles.txtPrice}>$ 4,99</Text>
-                        <TouchableOpacity>
-                            <Image style={Styles.imgAdd} source={require('../../../../media/images/icAdd.png')} />
-                        </TouchableOpacity>
-                    </View>
+            <Pressable onPress={() => navigation.navigate("Mango")}>
 
+                <View style={[Styles.boxShadown, Styles.cardPopular]}>
+                    <View style={{ margin: 10 }}>
+                        <View style={Styles.imgPop}>
+                            <Image source={require('../../../../media/images/banana.png')} />
+                        </View>
+                        <View style={{ height: '40%', position: 'relative' }}>
+                            <Text style={Styles.txtNamePop}>Red Apple</Text>
+                            <Text style={Styles.txtKg}>1kg,priceg</Text>
+                            <Text style={Styles.txtPrice}>$ 4,99</Text>
+                            <TouchableOpacity>
+                                <Image style={Styles.imgAdd} source={require('../../../../media/images/icAdd.png')} />
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
                 </View>
-            </View>
+            </Pressable>
         );
     }
 
@@ -87,13 +89,13 @@ const Shop = () => {
             </View>
 
             <View style={[{ marginTop: 53.17 }, Styles.type]}>
-                <Text style={Styles.txtType}>Categories</Text>
+                <Text style={Styles.txtType}>Popular deals</Text>
                 <Pressable style={Styles.seeAll}><Text style={Styles.txtSeeAll}>See All</Text></Pressable>
             </View>
 
-            <View style={{marginTop:34,height:'100%'}}>
+            <View style={{ marginTop: 34, height: '100%' }}>
                 <FlatList
-                    data={[1,2,3,4,5]}
+                    data={[1, 2, 3, 4, 5]}
                     renderItem={renderItemPopular}//gọi từ biến trên
                     keyExtractor={Math.random}//số không trùng
                     showsHorizontalScrollIndicator={false}
@@ -151,7 +153,7 @@ const Styles = StyleSheet.create({
         width: 150,
         height: 189,
         borderRadius: 20,
-        marginHorizontal:8,
+        marginHorizontal: 8,
     },
     nameCard: {
         color: '#6D3805',

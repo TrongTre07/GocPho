@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import React from 'react';
 
-const SignCode = () => {
+const SignCode = (props) => {
+  const { navigation } = props;
   return (
     <View style={styles.container}>
       {/* Back Arrow */}
@@ -57,7 +58,7 @@ const SignCode = () => {
         </View>
       </View>
 
-      <Pressable style={styles.btnSignUp}>
+      <Pressable style={styles.btnSignUp} onPress={()=> navigation.navigate("Login")}>
         <Text style={styles.signUpInsideButton}>Sign Up</Text>
       </Pressable>
     </View>
