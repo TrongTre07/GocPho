@@ -13,7 +13,8 @@ const user = useSelector(state =>state.login.userInfo)
     <NavigationContainer>
       {console.log("Logged: ", isLoggedIn)}
       {console.log("User at AppNavigation: ", user)}
-        {isLoggedIn ? <MainNavigation /> : <UserNavigation />}
+      <MainNavigation />
+        {/* {isLoggedIn ? <MainNavigation /> : <UserNavigation />} */}
     </NavigationContainer>
   )
 }
