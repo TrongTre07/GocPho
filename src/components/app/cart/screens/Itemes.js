@@ -27,7 +27,7 @@ const Itemes = (props) => {
                                 </View>
                             </View>
                             <Text style={ItemesS.text3}>$4,99 kg </Text>
-                            
+
                         </View>
 
                     </View>

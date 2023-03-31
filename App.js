@@ -38,10 +38,10 @@ const App = () => {
       <MainNavigation />
       {/* <UserNavigation /> */}
 
-      
-      
-    
-  
+
+
+
+
     </NavigationContainer>
   );
 };

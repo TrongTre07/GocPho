@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import React from 'react';
+import { SwipeRow } from 'react-native-swipe-list-view';
 
 const data = [
   {
@@ -28,7 +29,7 @@ const data = [
   {
     id: '3',
     image: require('../../../../media/images/AppleCart.png'),
-    nameFruit: 'Aplkfdgjsldfgjlsfjglfple',
+    nameFruit: 'AppleCart',
     cost: '2.33$',
     quantity: 1,
   },
@@ -71,36 +72,52 @@ const data = [
 
 const Cart = (props) => {
   const { navigation } = props;
-  const Item = ({item}) => {
+  const Item = ({ item }) => {
     return (
-      <View style={styles.itemContainer}>
-        {/* Image Fruit*/}
-        <Image source={item.image} />
+      <SwipeRow rightOpenValue={-75}>
+        <View style={styles.standaloneRowBack}>
+          <Text style={styles.backTextWhite}></Text>
+          <Text style={styles.backTextWhite}>Delete</Text>
+          {/* <Image
+            style={styles.iconDelete}
+            source={require('../../../../media/images/ic_Delete.png')}
+          /> */}
+        </View>
 
-        {/* Name Fruit and quantity */}
-        <View style={styles.nameFruitContainer}>
-          <Text style={styles.nameFruit}>{item.nameFruit}</Text>
-          <View style={styles.iconContainer}>
-            <TouchableHighlight>
-              <Image
-                style={styles.icon}
-                source={require('../../../../media/images/MinusIcon.png')}
-              />
-            </TouchableHighlight>
+        <View style={styles.standaloneRowFront}>
+          <View style={styles.itemContainer}>
+            {/* Image Fruit*/}
+            <Image source={item.image} />
 
-            <Text style={styles.cost}>1</Text>
-            <TouchableHighlight>
-              <Image
-                style={styles.icon}
-                source={require('../../../../media/images/PlusIcon.png')}
-              />
-            </TouchableHighlight>
+            {/* Name Fruit and quantity */}
+            <View style={styles.nameFruitContainer}>
+              <Text style={styles.nameFruit}>{item.nameFruit}</Text>
+              <View style={styles.iconContainer}>
+                <TouchableHighlight>
+                  <Image
+                    style={styles.icon}
+                    source={require('../../../../media/images/MinusIcon.png')}
+                  />
+                </TouchableHighlight>
+
+                <Text style={styles.cost}>1</Text>
+                <TouchableHighlight>
+                  <Image
+                    style={styles.icon}
+                    source={require('../../../../media/images/PlusIcon.png')}
+                  />
+                </TouchableHighlight>
+              </View>
+            </View>
+
+            {/* Cost */}
+            <Text style={styles.cost}>{item.cost}</Text>
           </View>
         </View>
 
-        {/* Cost */}
-        <Text style={styles.cost}>{item.cost}</Text>
-      </View>
+
+      </SwipeRow>
+
     );
   };
 
@@ -108,7 +125,6 @@ const Cart = (props) => {
     <View style={styles.container}>
       {/* Back Arrow */}
       <Image source={require('../../../../media/images/Arrow.png')}></Image>
-
       {/* Cart */}
       <View style={styles.mainTitle}>
         <Text style={styles.cart}>Cart</Text>
@@ -117,7 +133,7 @@ const Cart = (props) => {
       {/* Flatlist */}
       <FlatList
         data={data}
-        renderItem={({item}) => <Item item={item} />}
+        renderItem={({ item }) => <Item item={item} />}
         keyExtractor={item => item.id}
         style={styles.flatlist}
         showsVerticalScrollIndicator={false}
@@ -133,6 +149,27 @@ const Cart = (props) => {
 export default Cart;
 
 const styles = StyleSheet.create({
+  iconDelete: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  standaloneRowFront: {
+    // alignItems: 'center',
+    backgroundColor: '#FFF',
+    // justifyContent: 'center',
+    // height: 50,
+  },
+  standaloneRowBack: {
+    alignItems: 'center',
+    backgroundColor: 'red',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 15,
+  },
+  backTextWhite: {
+    color: '#FFF',
+  },
   flatlist: {
     height: '70%',
     marginVertical: 30,
@@ -198,7 +235,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    backgroundColor:'white',
+    backgroundColor: 'white',
     padding: 20,
   },
 });
