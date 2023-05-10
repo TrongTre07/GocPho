@@ -1,363 +1,315 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TextInput,
-  Pressable,
-  FlatList,
-  TouchableOpacity,
-  ImageBackground,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {fetchData} from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
-import {useDispatch, useSelector} from 'react-redux';
-import {showItemMatch} from '../../../../redux-toolkit/selector';
-import {categoryFilterChange, searchFilterChange} from '../../../../redux-toolkit/reducer_slice/shop_slice/filterSlice';
-import {fetchCategory} from '../../../../redux-toolkit/reducer_slice/shop_slice/shopPageCategorySlice';
+import { View, Text, StyleSheet, Image, TextInput, Pressable, FlatList, TouchableOpacity, _Image, ImageBackground } from 'react-native'
+import React,{useEffect} from 'react'
 
-const Explore = props => {
-  const {navigation} = props;
-  const dispatch = useDispatch();
 
-  const dataExplore = useSelector(showItemMatch);
-  const dataCategory = useSelector(state => state.dataCategoryMainShop.data);
+const Explore = (props) => {
+    const { navigation } = props;
 
-  const [search, setSearch] = useState('');
+    const renderItem = ({ item }) => {
+        // const item= props;
+        const { _name, image, _background, _id } = item;
+        return (
+            <TouchableOpacity
+                onPress={() => navigation.navigate("Fruit")}
+                style={Styles.card}
+            // onPress={() => navigation.navigate('Detail', {id: _id}
+            //     )}
+            >
+                <View style={[Styles.imgCard]}>
+                    <ImageBackground style={Styles.imgCardBackground} source={_background}>
+                        <Image
+                            source={image}
+                        >
+                        </Image>
+                    </ImageBackground>
+                </View>
 
-  useEffect(() => {
-    dispatch(fetchData());
-  }, [fetchData]);
+                <Text style={Styles.nameCard}>
+                    {_name}
+                </Text>
 
-  useEffect(() => {
-    dispatch(fetchCategory);
-  }, [fetchCategory]);
-
-  const handleSearch = value => {
-    setSearch(value);
-    dispatch(searchFilterChange(value));
-  };
-
-  const handleCategory = id => {
-    index = dataCategory.findIndex(item => {
-     return item.id == id;
-    });
-    
-    if (index != -1) {
-      dispatch(categoryFilterChange(dataCategory[index].name));
+            </TouchableOpacity>
+        );
     }
-  };
 
-  const renderItem = ({item}) => {
-    // const item= props;
-    const {name, image, background, id} = item;
+
     return (
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Fruit')}
-        style={Styles.card}
-        // onPress={() => navigation.navigate('Detail', {id: _id}
-        //     )}
-      >
-        <View style={[Styles.imgCard]}>
-          <ImageBackground style={Styles.imgCardBackground} source={background}>
-            <Image
-              style={{width: 80, height: 80, resizeMode: 'center'}}
-              source={{uri: image}}></Image>
-          </ImageBackground>
+        <View style={Styles.container}>
+            <View style={Styles.title}>
+                <Text style={Styles.txtTitle}>Categories</Text>
+            </View>
+            <View style={Styles.search}>
+                <TextInput placeholder='Search'
+                    placeholderTextColor='rgba(109, 56, 5, 0.57)'
+                    style={Styles.ipSearch}>
+
+                </TextInput>
+                <Image style={Styles.imgSearch} source={require('../../../../media/images/icSearch.png')} />
+            </View>
+
+            <View style={Styles.listCate}>
+                <FlatList
+                    data={data}
+                    numColumns={3}
+                    renderItem={renderItem}//gọi từ biến trên
+                    keyExtractor={(item) => item._id}//số không trùng
+                    showsVerticalScrollIndicator={false}
+                    horizontal={false}
+                    columnWrapperStyle={{ justifyContent: 'space-between' }}
+                />
+            </View>
+
+
+
+
+
+
         </View>
+    )
+}
 
-        <Text numberOfLines={2} style={Styles.nameCard}>
-          {name}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-
-  const ItemCategory = ({item}) => {
-    return (
-      <View style={{height: 30, marginTop: 10}}>
-        <Pressable onPress={() => handleCategory(item.id)}>
-          <Text style={Styles.listCategory}>{item.name}</Text>
-        </Pressable>
-      </View>
-    );
-  };
-
-  return (
-    <View style={Styles.container}>
-      <View style={Styles.title}>
-        <Text style={Styles.txtTitle}>Categories</Text>
-      </View>
-      <View style={Styles.search}>
-        <TextInput
-          value={search}
-          onChangeText={handleSearch}
-          placeholder="Search"
-          placeholderTextColor="rgba(109, 56, 5, 0.57)"
-          style={Styles.ipSearch}></TextInput>
-        <Image
-          style={Styles.imgSearch}
-          source={require('../../../../media/images/icSearch.png')}
-        />
-      </View>
-
-      <FlatList
-        data={dataCategory}
-        renderItem={({item}) => <ItemCategory item={item} />}
-        keyExtractor={item => item.id}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-      />
-
-      <FlatList
-        data={dataExplore}
-        numColumns={3}
-        renderItem={renderItem} //gọi từ biến trên
-        keyExtractor={item => item.id} //số không trùng
-        showsVerticalScrollIndicator={false}
-        horizontal={false}
-        columnWrapperStyle={{justifyContent: 'space-between'}}
-      />
-    </View>
-  );
-};
-
-export default Explore;
+export default Explore
 const Styles = StyleSheet.create({
-  listCategory: {
-    fontSize: 20,
-    fontWeight: '400',
-    lineHeight: 24,
-    marginHorizontal: 7,
-    color: '#6D3805',
-  },
-  nameCard: {
-    color: '#6D3805',
-    marginTop: 8,
-    fontSize: 15,
-    fontWeight: '400',
-    lineHeight: 18,
-    width: 100,
-  },
-  imgCardItem: {},
 
-  imgCardBackground: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 100,
-    height: 100,
-  },
+    nameCard: {
+        color: '#6D3805',
+        marginTop: 16.5,
+        fontSize: 15,
+        fontWeight: '400',
+        lineHeight: 18,
 
-  imgCard: {},
-  card: {
-    alignItems: 'center',
-    marginTop: 20,
-    marginHorizontal: 5,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  listCate: {},
+    },
+    imgCardItem: {
 
-  imgSearch: {
-    position: 'absolute',
-    width: 19.92,
-    height: 18,
-    marginVertical: 15,
-    marginLeft: 14.38,
-  },
-  ipSearch: {
-    position: 'absolute',
-    backgroundColor: '#F3F3F3',
-    borderRadius: 7,
-    width: '100%',
-    color: 'rgba(109, 56, 5, 0.57)',
-    paddingLeft: 42.05,
-  },
-  search: {
-    marginTop: 18,
-    position: 'relative',
-    height: 48,
-  },
+    },
 
-  icLocation: {
-    width: 15.88,
-    height: 20,
-  },
-  txtTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    lineHeight: 28.8,
-    letterSpacing: -0.17,
-    color: '#FF5E00',
-    marginLeft: 8.62,
-  },
+    imgCardBackground: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 100,
+        height: 100
 
-  title: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 29,
-    width: '100%',
-    marginTop: 30,
-  },
+    },
 
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 16,
-  },
-});
+    imgCard: {
 
-var data = [
-  {
-    _id: '1',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/violet.png'),
-    image: require('../../../../media/images/fruits.png'),
-  },
-  {
-    _id: '2',
-    _name: 'Vegetable',
-    _background: require('../../../../media/images/orange.png'),
-    image: require('../../../../media/images/vegetables.png'),
-  },
-  {
-    _id: '3',
-    _name: 'Meat',
-    _background: require('../../../../media/images/red.png'),
-    image: require('../../../../media/images/meat.png'),
-  },
-  {
-    _id: '4',
-    _name: 'Fish',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '5',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '6',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '7',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '8',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '9',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '10',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '11',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '12',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '13',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '14',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '15',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '16',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '17',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '18',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '19',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '20',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '21',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '22',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '23',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '24',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-  {
-    _id: '25',
-    _name: 'Fruits',
-    _background: require('../../../../media/images/pink.png'),
-    image: require('../../../../media/images/fish.png'),
-  },
-];
+    },
+    card: {
+        alignItems: 'center',
+        marginTop: 29,
+
+    },
+    listCate: {
+        height: '100%',
+
+
+    },
+
+
+    imgSearch: {
+        position: 'absolute',
+        width: 19.92,
+        height: 18,
+        marginVertical: 15,
+        marginLeft: 14.38
+    },
+    ipSearch: {
+        position: 'absolute',
+        backgroundColor: '#F3F3F3',
+        borderRadius: 7,
+        width: '100%',
+        color: 'rgba(109, 56, 5, 0.57)',
+        paddingLeft: 42.05,
+
+    },
+    search: {
+        marginTop: 18,
+        position: 'relative',
+        height: 48,
+
+    },
+
+    icLocation: {
+        width: 15.88,
+        height: 20,
+    },
+    txtTitle: {
+        fontSize: 24,
+        fontWeight: '700',
+        lineHeight: 28.8,
+        letterSpacing: -0.17,
+        color: '#FF5E00',
+        marginLeft: 8.62
+    },
+
+    title: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 29,
+        width: '100%',
+        marginTop: 30,
+
+    },
+
+    container: {
+        flex: 1,
+        backgroundColor: '#ffffff',
+        paddingHorizontal: 16
+    }
+
+})
+
+var data =
+    [
+        {
+            "_id": "1",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/violet.png"),
+            "image": require("../../../../media/images/fruits.png")
+        },
+        {
+            "_id": "2",
+            "_name": "Vegetable",
+            "_background": require("../../../../media/images/orange.png"),
+            "image": require("../../../../media/images/vegetables.png")
+        },
+        {
+            "_id": "3",
+            "_name": "Meat",
+            "_background": require("../../../../media/images/red.png"),
+            "image": require("../../../../media/images/meat.png")
+        },
+        {
+            "_id": "4",
+            "_name": "Fish",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "5",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "6",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "7",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "8",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "9",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "10",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "11",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "12",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "13",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "14",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "15",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "16",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "17",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "18",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "19",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "20",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "21",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "22",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "23",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "24",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+        {
+            "_id": "25",
+            "_name": "Fruits",
+            "_background": require("../../../../media/images/pink.png"),
+            "image": require("../../../../media/images/fish.png")
+        },
+    ]

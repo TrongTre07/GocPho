@@ -6,144 +6,39 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
-import React, {useState, useEffect, useCallback} from 'react';
+import React from 'react';
 
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
-import loginSlice, {
-  changeStatusLogin,
-  getUserInformationFromGoogle,
-} from '../../../../redux-toolkit/reducer_slice/user_slice/loginSlice';
-import {useDispatch} from 'react-redux';
-
-import CountryPicker from 'react-native-country-picker-modal';
-
-GoogleSignin.configure();
-
-const LogIn = props => {
-  const [user, setUser] = useState(null);
-
-  const {navigation} = props;
-
-  const [countryCode, setCountryCode] = useState('VN');
-  const [callingCode, setCallingCode] = useState('84');
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    GoogleSignin.configure({});
-
-    const getCurrentUser = async () => {
-      const currentUser = await GoogleSignin.getCurrentUser();
-
-      if (currentUser) {
-        setUser(currentUser);
-      }
-    };
-
-    getCurrentUser();
-  }, []);
-
-  // const getCurrentUser = useCallback(async () => {
-  //   const currentUser = await GoogleSignin.getCurrentUser();
-
-  //   if (currentUser) {
-  //     setUser(currentUser);
-  //   }
-  // }, [setUser]);
-
-  // useEffect(() => {
-  //   GoogleSignin.configure({});
-  //   getCurrentUser();
-  // }, [getCurrentUser]);
-
-  const signIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      setUser(userInfo);
-      console.log('User infor: ', userInfo);
-
-      dispatch(await getUserInformationFromGoogle(userInfo));
-      dispatch(await changeStatusLogin(true));
-      // console.log('User: ', user);
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-        console.log('user cancelled the login flow ');
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('operation (e.g. sign in) is in progress already');
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-        console.log('play services not available or outdated');
-      } else {
-        console.log('some other error happened');
-        // some other error happened
-      }
-    }
-  };
-
-  const handleLogin = async () => {
-    console.log('User: ', user);
-    dispatch(getUserInformationFromGoogle(user));
-    dispatch(changeStatusLogin(true));
-  };
-
-  const signOut = async () => {
-    try {
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
-      setUser(null);
-    } catch (error) {
-      console.log('Error:', error.message);
-    }
-  };
-
+const LogIn = (props) => {
+  const { navigation } = props;
   return (
     <View style={styles.container}>
       {/* Back Arrow */}
       <Image source={require('../../../../media/images/Arrow.png')}></Image>
+
       {/* SignUP */}
       <View style={styles.mainTitle}>
         <Text style={styles.signUp}>Sign In</Text>
       </View>
+
       {/* Main background image */}
       <Image
         source={require('../../../../media/images/LoginPhoneEdited.png')}
       />
+
       {/* For the security */}
       <Text style={styles.sentSMS} numberOfLines={2}>
         Enter your phone number and password to access your account{' '}
       </Text>
+
       {/* Phone Number input */}
       <View style={styles.passwordContainer}>
-        <View style={styles.inputPasswordConfirmPassword}>
-          <CountryPicker
-            style={{alignItems: 'center'}}
-            withFilter
-            countryCode={countryCode}
-            withFlag
-            withAlphaFilter
-            withEmoji={true}
-            withCallingCode={false}
-            withCurrencyButton={false}
-            onSelect={country => {
-              const {cca2, callingCode} = country;
-              console.log('country: ', country);
-              setCountryCode(cca2);
-              setCallingCode(callingCode);
-            }}
-          />
-          <TextInput
-            placeholder="Phone Number"
-            placeholderTextColor={'#AC8E71'}
-          />
-        </View>
+        <TextInput
+          placeholder="Phone Number"
+          placeholderTextColor={'#AC8E71'}
+          style={styles.inputPasswordConfirmPassword}
+        />
       </View>
+
       {/* Confirm Password input */}
       <View style={styles.passwordContainer}>
         <TextInput
@@ -157,33 +52,22 @@ const LogIn = props => {
           source={require('../../../../media/images/IconEye.png')}
         />
       </View>
+
       <View style={styles.forgotPasswordContainer}>
         <View></View>
         <Text style={styles.forgotPassword}>Forgot Password</Text>
       </View>
 
-      <Pressable style={styles.btnSignUp} onPress={() => navigation.goBack()}>
-        <Text style={styles.signUpInsideButton}>Sign In</Text>
+      <Pressable style={styles.btnSignUp} onPress={()=> navigation.goBack()}>
+        <Text style={styles.signUpInsideButton}>Sign in</Text>
       </Pressable>
 
-      <View style={{alignItems: 'center', justifyContent: 'center'}}>
-        <GoogleSigninButton
-          style={{width: 192, height: 48}}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={signIn}
-        />
-      </View>
       {/* Already have an account? Login */}
       <View style={styles.alreadyHaveAccount}>
         <Text style={[styles.already, {color: '#7F4E1D'}]}>
-          Don't have an account?{' '}
+          Already have an account?{' '}
         </Text>
-        <Text
-          style={[styles.already, {color: '#FF5E00'}]}
-          onPress={() => navigation.navigate('SignUp')}>
-          Sign Up
-        </Text>
+        <Text style={[styles.already, {color: '#FF5E00'}]}>Sign Up</Text>
       </View>
     </View>
   );
@@ -231,12 +115,10 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   inputPasswordConfirmPassword: {
-    alignItems: 'center',
-    flexDirection: 'row',
     backgroundColor: '#F3F3F3',
     marginTop: 16,
     borderRadius: 6,
-    paddingLeft: 20,
+    paddingLeft: 50,
   },
   signUpInsideButton: {
     color: 'white',
@@ -247,10 +129,11 @@ const styles = StyleSheet.create({
   },
   btnSignUp: {
     backgroundColor: '#FF5E00',
-    marginTop: 10,
+    marginTop: 40,
     height: '8%',
     borderWidth: 1,
     borderRadius: 30,
+    borderColor: '#FF5E00',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -293,6 +176,5 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 20,
-    flex: 1,
   },
 });

@@ -7,153 +7,100 @@ import {
   TextInput,
   FlatList,
   TouchableHighlight,
-  Touchable,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {buyItemSlice} from '../../../../redux-toolkit/reducer_slice/cart_slice/buyItemSlice';
-import {addItem} from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
-import {incrementItemQuantity} from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
-import {decrementItemQuantity} from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
-import {sortListByTotalCost} from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
-import {sortListByName} from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
-import {cloneIncrementItemQuantity} from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
-import {sortListByQuantity} from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
-import SelectDropdown from 'react-native-select-dropdown';
-import {fetchData} from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
-import {SwipeRow} from 'react-native-swipe-list-view';
+import React from 'react';
 
-const Cart = props => {
-  const listData = useSelector(state => state.dataAPI.data);
-  console.log('data: ', listData);
-  const loading = useSelector(state => state.dataAPI.loading);
-  const error = useSelector(state => state.dataAPI.error);
-  const sort = ['Name', 'Total Price', 'Quantity'];
+const data = [
+  {
+    id: '1',
+    image: require('../../../../media/images/AppleCart.png'),
+    nameFruit: 'AppleCart',
+    cost: '2.33$',
+    quantity: 1,
+  },
+  {
+    id: '2',
+    image: require('../../../../media/images/AppleCart.png'),
+    nameFruit: 'AppleCart',
+    cost: '2.33$',
+    quantity: 1,
+  },
+  {
+    id: '3',
+    image: require('../../../../media/images/AppleCart.png'),
+    nameFruit: 'Aplkfdgjsldfgjlsfjglfple',
+    cost: '2.33$',
+    quantity: 1,
+  },
+  {
+    id: '4',
+    image: require('../../../../media/images/AppleCart.png'),
+    nameFruit: 'AppleCart',
+    cost: '2.33$',
+    quantity: 1,
+  },
+  {
+    id: '5',
+    image: require('../../../../media/images/AppleCart.png'),
+    nameFruit: 'AppleCart',
+    cost: '2.33$',
+    quantity: 1,
+  },
+  {
+    id: '6',
+    image: require('../../../../media/images/AppleCart.png'),
+    nameFruit: 'AppleCart',
+    cost: '2.33$',
+    quantity: 1,
+  },
+  {
+    id: '7',
+    image: require('../../../../media/images/AppleCart.png'),
+    nameFruit: 'AppleCart',
+    cost: '2.33$',
+    quantity: 1,
+  },
+  {
+    id: '8',
+    image: require('../../../../media/images/AppleCart.png'),
+    nameFruit: 'AppleCart',
+    cost: '2.33$',
+    quantity: 1,
+  },
+];
 
-  const {navigation} = props;
-
-  useEffect(() => {
-    dispatch(fetchData());
-  }, [fetchData]);
-
-  const dispatch = useDispatch();
-
-  const addItemRedux = () => {
-    dispatch(
-      addItem({
-        id: Math.random(),
-        nameFruit: 'AppleCart',
-        image: require('../../../../media/images/AppleCart.png'),
-        cost: '2$',
-        quantity: 1,
-      }),
-    );
-  };
-
-  const handleUpRedux = id => {
-    console.log('ID: ', id);
-    dispatch(incrementItemQuantity({id}));
-  };
-
-  const handleDownRedux = id => {
-    dispatch(decrementItemQuantity({id}));
-  };
-
-  const sortListByCostRedux = () => {
-    dispatch(sortListByTotalCost());
-  };
-
-  const sortListByNameRedux = () => {
-    dispatch(sortListByName());
-  };
-
-  const sortListByQuantityRedux = () => {
-    dispatch(sortListByQuantity());
-  };
-
+const Cart = (props) => {
+  const { navigation } = props;
   const Item = ({item}) => {
     return (
-      // <Pressable onPress={()=> deleteItem(item.id)}>
       <View style={styles.itemContainer}>
         {/* Image Fruit*/}
-        <Image
-          style={{width: 130, height: 100, resizeMode: 'contain'}}
-          source={{uri: item.image}}
-        />
+        <Image source={item.image} />
 
         {/* Name Fruit and quantity */}
         <View style={styles.nameFruitContainer}>
-          <Text numberOfLines={2} style={styles.nameFruit}>
-            {item.name}
-          </Text>
+          <Text style={styles.nameFruit}>{item.nameFruit}</Text>
           <View style={styles.iconContainer}>
-            <Pressable onPress={() => handleDownRedux(item.id)}>
+            <TouchableHighlight>
               <Image
                 style={styles.icon}
                 source={require('../../../../media/images/MinusIcon.png')}
               />
-            </Pressable>
+            </TouchableHighlight>
 
-            <Text style={styles.cost}>{item.quantity}</Text>
-            <Pressable onPress={() => handleUpRedux(item.id)}>
+            <Text style={styles.cost}>1</Text>
+            <TouchableHighlight>
               <Image
                 style={styles.icon}
                 source={require('../../../../media/images/PlusIcon.png')}
               />
-            </Pressable>
+            </TouchableHighlight>
           </View>
         </View>
 
         {/* Cost */}
-        <Text style={styles.cost}>{item.cost * item.quantity} $</Text>
+        <Text style={styles.cost}>{item.cost}</Text>
       </View>
-      // </Pressable>
-    );
-  };
-
-  const ItemSwipe = ({item}) => {
-    return (
-      <SwipeRow rightOpenValue={-75}>
-        <View style={styles.standaloneRowBack}>
-          <Text style={styles.backTextWhite}></Text>
-          <Text style={styles.backTextWhite}>Delete</Text>
-          {/* <Image
-            style={styles.iconDelete}
-            source={require('../../../../media/images/ic_Delete.png')}
-          /> */}
-        </View>
-
-        <View style={styles.standaloneRowFront}>
-          <View style={styles.itemContainer}>
-            {/* Image Fruit*/}
-            <Image source={item.image} />
-
-            {/* Name Fruit and quantity */}
-            <View style={styles.nameFruitContainer}>
-              <Text style={styles.nameFruit}>{item.nameFruit}</Text>
-              <View style={styles.iconContainer}>
-                <TouchableHighlight>
-                  <Image
-                    style={styles.icon}
-                    source={require('../../../../media/images/MinusIcon.png')}
-                  />
-                </TouchableHighlight>
-
-                <Text style={styles.cost}>1</Text>
-                <TouchableHighlight>
-                  <Image
-                    style={styles.icon}
-                    source={require('../../../../media/images/PlusIcon.png')}
-                  />
-                </TouchableHighlight>
-              </View>
-            </View>
-
-            {/* Cost */}
-            <Text style={styles.cost}>{item.cost}</Text>
-          </View>
-        </View>
-      </SwipeRow>
     );
   };
 
@@ -167,64 +114,16 @@ const Cart = props => {
         <Text style={styles.cart}>Cart</Text>
       </View>
 
-      <View style={styles.selectDropdown}>
-        <SelectDropdown
-          data={sort}
-          buttonStyle={{
-            backgroundColor: '#AC7253',
-            width: 120,
-            height: 40,
-            borderRadius: 20,
-          }}
-          buttonTextStyle={{
-            color: 'white',
-            fontSize: 16,
-            fontWeight: '700',
-            lineHeight: 22,
-          }}
-          dropdownStyle={{}}
-          rowStyle={{
-            borderWidth: 1,
-            backgroundColor: '#00FF4A',
-            borderColor: 'black',
-          }}
-          rowTextStyle={{
-            fontSize: 16,
-            fontWeight: '700',
-            lineHeight: 22,
-            color: 'black',
-          }}
-          onSelect={(selectedItem, index) => {
-            if (selectedItem == 'Name') {
-              sortListByNameRedux();
-            } else if (selectedItem == 'Total Price') {
-              sortListByCostRedux();
-            } else {
-              sortListByQuantityRedux();
-            }
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            return selectedItem;
-          }}
-          rowTextForSelection={(item, index) => {
-            return item;
-          }}
-          defaultButtonText={'Sort'}
-        />
-      </View>
-
       {/* Flatlist */}
       <FlatList
-        data={listData}
+        data={data}
         renderItem={({item}) => <Item item={item} />}
         keyExtractor={item => item.id}
         style={styles.flatlist}
         showsVerticalScrollIndicator={false}
       />
 
-      <Pressable
-        style={styles.btnSignUp}
-        onPress={() => navigation.navigate('Payment')}>
+      <Pressable style={styles.btnSignUp} onPress={() => navigation.navigate('Payment')}>
         <Text style={styles.signUpInsideButton}>CheckOut</Text>
       </Pressable>
     </View>
@@ -234,34 +133,9 @@ const Cart = props => {
 export default Cart;
 
 const styles = StyleSheet.create({
-  iconDelete: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  standaloneRowFront: {
-    // alignItems: 'center',
-    backgroundColor: '#FFF',
-    // justifyContent: 'center',
-    // height: 50,
-  },
-  standaloneRowBack: {
-    alignItems: 'center',
-    backgroundColor: 'white',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 15,
-  },
-  backTextWhite: {
-    color: '#FFF',
-  },
-  selectDropdown: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
   flatlist: {
-    height: 600,
-    marginVertical: 5,
+    height: '70%',
+    marginVertical: 30,
   },
   nameFruitContainer: {
     flexDirection: 'column',
@@ -279,7 +153,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 18,
     lineHeight: 32,
-    width: 150,
   },
   iconContainer: {
     flexDirection: 'row',
@@ -296,7 +169,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 5,
   },
   signUpInsideButton: {
     color: 'white',
@@ -326,8 +198,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    backgroundColor: 'white',
+    backgroundColor:'white',
     padding: 20,
-    flex: 1,
   },
 });
