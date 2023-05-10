@@ -21,6 +21,7 @@ const ShopNavigation = () => {
         <Stack.Navigator
             screenOptions={{ headerShown: false }}
         >
+
             {
                 Navigations.Stacks.map((item, index) => {
                     return (
@@ -29,6 +30,9 @@ const ShopNavigation = () => {
                 })
             }
         </Stack.Navigator>
+
+
+
     )
 }
 
