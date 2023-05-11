@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Button} from 'react-native';
+import {StyleSheet, Text, View, Button,Image} from 'react-native';
 import React, {
   useState,
   useContext,
@@ -22,6 +22,7 @@ import AppNavigation from './src/components/app/appNavigation/AppNavigation';
 import MainNavigation from './src/components/app/appNavigation/MainNavigation';
 import {createStackNavigator} from '@react-navigation/stack';
 
+
 const Stack = createStackNavigator();
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -42,14 +43,16 @@ import Explore from './src/components/app/shop/screens/Explore';
 import FavoriteScreen from './src/components/app/shop/screens/FavoriteScreen';
 import Fruit from './src/components/app/shop/screens/Fruit';
 import Address from './src/components/app/user/screens/Address';
+import ChooseAddress from './src/components/app/shop/screens/ChooseAddress';
+
 
 const App = () => {
 
   return (
     
-    <Provider store={store}>
-        <AppNavigation />
-    </Provider>
+  
+        <ChooseAddress/>
+   
   );
 };
 
