@@ -1,33 +1,71 @@
-import { StyleSheet, Text, View, Pressable, TextInput,Image } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Pressable, TextInput, Image } from 'react-native'
+import React, { useState } from 'react'
 
 const ChangePassword = (props) => {
     const { navigation } = props;
+    const [hover, SetHover] = useState(false);
+    const [hover1, SetHover1] = useState(false);
+
+    const isHover = () => {
+        SetHover(!hover);
+        console.log(hover)
+    }
+
+    const isHover1 = () => {
+        SetHover1(!hover1);
+    }
+
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Change Password</Text>
-            <View style={styles.vector1}>
-                <TextInput style={styles.oldpassword}
-                    placeholder='Old Password :' />
-                <Image style={styles.image} source={require('../../../../media/images/vector.png')}/>
+            <View style={styles.v}>
+                <Image style={styles.image1} source={require('../../../../media/images/vector.png')} />
+                <View style={styles.ipContainer}>
+
+                    <TextInput style={styles.txtInput} placeholder='Old Password :' />
+                    <Image
+                        source={require('../../../../media/images/visibility.png')}
+                        style={styles.iconEye}
+                    />
+                </View>
             </View>
-            <View style={styles.vector2}>
-                <TextInput style={styles.newpassword}
-                    placeholder='New password :' />
-                <Image style={styles.image} source={require('../../../../media/images/vector.png')}/>
+
+            <View style={styles.v2}>
+                <Image style={styles.image1} source={require('../../../../media/images/vector.png')} />
+                <View style={styles.ipContainer}>
+
+                    <TextInput style={styles.txtInput} placeholder='New password :' />
+                    <Image
+                        source={require('../../../../media/images/visibility.png')}
+                        style={styles.iconEye}
+                    />
+                </View>
             </View>
-            <View style={styles.vector3}>
-                <TextInput style={styles.confirmpassword}
-                    placeholder='Confirm password :' />
-                <Image style={styles.image3} source={require('../../../../media/images/vector.png')}/>
+
+            <View style={styles.v3}>
+                <Image style={styles.image1} source={require('../../../../media/images/vector.png')} />
+                <View style={styles.ipContainer}>
+
+                    <TextInput style={styles.txtInput} placeholder='Confirm password :' />
+                    <Image
+                        source={require('../../../../media/images/visibility.png')}
+                        style={styles.iconEye}
+                    />
+                </View>
             </View>
-            <Pressable style={styles.confirm1}
+            <Pressable onPress={isHover} style={() => hover ? styles.confirm1 : styles.confirm11}
                 title='Update Profile' >
-                <Text style={styles.updateText}>Confirm</Text>
+                {hover ?
+                    <Text style={styles.updateText}>Confirm</Text>
+                    :
+                    <Text style={styles.updateText2}>Confirm</Text>}
+
             </Pressable>
-            <Pressable style={styles.confirm2}
+            <Pressable onPress={isHover1} style={() => hover1 ? styles.confirm2 : styles.confirm22}
                 title='Update Profile' >
-                <Text style={styles.updateText}>Back To Sign In</Text>
+                {hover1 ?
+                    <Text style={styles.updateText}>Back To Sign In</Text>
+                    :
+                    <Text style={styles.updateText2}>Back To Sign In</Text>}
             </Pressable>
         </View>
     )
@@ -36,75 +74,60 @@ const ChangePassword = (props) => {
 export default ChangePassword
 
 const styles = StyleSheet.create({
-    vector3:{
-        position: 'relative',
+    v: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         width: '100%',
-        marginTop:5
     },
-    image3: {
-        position: 'absolute',
-        top: 160,
-    },
-    vector2:{
-        position: 'relative',
+    txtInput: {
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: '#F3F3F3',
+        borderRadius: 5,
+        margin: 20,
+        padding: 10,
+        height: 40,
         width: '100%',
-        marginTop:40    
+        backgroundColor: '#F3F3F3'
     },
-    image: {
+    iconEye: {
         position: 'absolute',
-        top: 145,
+        right: 10,
+        top: 30,
     },
-    vector1:{
+    ipContainer: {
         position: 'relative',
-        width: '100%',
-        marginTop:5
+        width: '90%',
+        top: 50,
+
     },
-    image: {
+    iconEye1: {
         position: 'absolute',
-        top: 145,
+        right: 3,
+    },
+    image1: {
+        position: 'absolute',
+        top: 90,
+    },
+    v2: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        top : 30,
+    },
+    v3: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        top: 10,
     },
     container: {
         padding: 16,
         flex: 1,
         alignItems: 'center',
-    },
-    title: {
-        color: '#FF5E00',
-        fontSize: 28,
-        fontWeight: '700',
-        width:250,
-        height:50,
-        top:74,
-        alignItems:'center',
-        letterSpacing:-0.408,
-    },
-    oldpassword: {
-        backgroundColor:'#F3F3F3',
-        paddingLeft:10,
-        width: 348,
-        height: 40,
-        left: 13,
-        top: 130,
-        background: '#F3F3F3',
-        borderRadius:5,
-    },
-    newpassword: {
-        backgroundColor:'#F3F3F3',
-        width: 343,
-        height: 40,
-        left: 13,
-        top: 138,
-        background: '#F3F3F3',
-        borderRadius:5,
-    },
-    confirmpassword: {
-        backgroundColor:'#F3F3F3',
-        width: 343,
-        height: 40,
-        left: 13,
-        top: 148,
-        background: '#F3F3F3',
-        borderRadius:5,
     },
     confirm1: {
         position: 'absolute',
@@ -112,6 +135,17 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 30,
         backgroundColor: '#FF5E00',
+        marginTop: 555,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    confirm11: {
+        position: 'absolute',
+        width: '100%',
+        height: 50,
+        borderWidth: 1,
+        borderRadius: 30,
+        borderColor: '#FF5E00',
         marginTop: 555,
         alignItems: 'center',
         justifyContent: 'center',
@@ -125,6 +159,15 @@ const styles = StyleSheet.create({
         color: '#fff'
 
     },
+    updateText2: {
+        height: 22,
+        fontWeight: '700',
+        fontSize: 18,
+        lineHeight: 22,
+        letterSpacing: -0.165,
+        color: '#000'
+
+    },
     confirm2: {
         position: 'absolute',
         width: '100%',
@@ -134,6 +177,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#FF5E00',
+
+    },
+    confirm22: {
+        position: 'absolute',
+        width: '100%',
+        height: 50,
+        borderWidth: 1,
+        borderRadius: 30,
+        borderColor: '#FF5E00',
+        backgroundColor: '#fff',
+        marginTop: 615,
+        alignItems: 'center',
+        justifyContent: 'center',
 
     },
 })

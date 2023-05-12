@@ -42,13 +42,16 @@ import Explore from './src/components/app/shop/screens/Explore';
 import FavoriteScreen from './src/components/app/shop/screens/FavoriteScreen';
 import Fruit from './src/components/app/shop/screens/Fruit';
 import Address from './src/components/app/user/screens/Address';
+import ZaloPay from './src/components/app/cart/screens/ZaloPay';
+import EditProfile from './src/components/app/user/screens/EditProfile';
+import ChangePassword from './src/components/app/user/screens/ChangePassword';
 
 const App = () => {
 
   return (
     
     <Provider store={store}>
-        <Address />
+        <ChangePassword />
     </Provider>
   );
 };

@@ -13,8 +13,9 @@ const EditProfile = (props) => {
                 <Text style={styles.title}>Edit Profile</Text>
 
             </View>
-            <TextInput style={styles.name}
-                placeholder='mati egh :' />
+            <TextInput style={[styles.name]}
+                placeholder='mati egh :'
+            />
             <View style={styles.hinh}>
                 <View style={styles.phone}>
                     <CountryPicker
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
         height: 48,
         backgroundColor: '#F3F3F3',
         borderRadius: 5,
+        
     },
     phone: {
         flexDirection:'row',
