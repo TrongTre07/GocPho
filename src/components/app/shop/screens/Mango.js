@@ -11,11 +11,12 @@ import {
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../../../../redux-toolkit/reducer_slice/cart_slice/getProductAPISlice';
+import { ImageSlider } from "react-native-image-slider-banner";
 
 const renderItemPopular = ({ item }) => {
   const { __id, image, price, kg } = item;
   return (
-    <View style={{marginVertical:10}} >
+    <View style={{ marginVertical: 10 }} >
       <View style={[styles.boxShadown, styles.cardPopular]}>
         <View style={styles.imgPop}>
           <Image source={require('../../../../media/images/apple.png')} />
@@ -24,15 +25,15 @@ const renderItemPopular = ({ item }) => {
           <Text style={styles.txtNamePop}>Red Apple</Text>
           <Text style={styles.txtKg}>1kg,priceg</Text>
           <Text style={styles.txtPrice}>$ 4,99</Text>
-          
+
         </View>
 
         <TouchableOpacity>
-            <Image
-              style={styles.imgAdd}
-              source={require('../../../../media/images/icAdd.png')}
-            />
-          </TouchableOpacity>
+          <Image
+            style={styles.imgAdd}
+            source={require('../../../../media/images/icAdd.png')}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -72,7 +73,22 @@ const Mango = props => {
   const { navigation } = props;
   return (
     //minHeight : '100%'
+
     <ScrollView style={styles.container}>
+      <ImageSlider
+        data={[
+          <Image 
+          style={{width: 50, height: 100}}
+          source={require('../../../../media/images/apple.png')}
+           />,
+          { img: 'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510__340.jpg' },
+          { img: 'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510__340.jpg' },
+          { img: 'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510__340.jpg' }
+        ]}
+        autoPlay={false}
+        onItemChanged={(item) => console.log("item", item)}
+        closeIconColor="#fff"
+      />
       <View>
         {/* Image Fruit */}
         <View style={styles.fruitContainer}>
@@ -131,7 +147,7 @@ const Mango = props => {
 
         {/* You may also need */}
         <Text style={styles.more}>You may also need</Text>
-        <View style={{marginVertical:20}}>
+        <View style={{ marginVertical: 20 }}>
           <FlatList
             data={[1, 2, 3, 4, 5]}
             renderItem={renderItemPopular} //gọi từ biến trên
@@ -254,7 +270,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   fruitContainer: {
-    height:300,
+    height: 300,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -264,6 +280,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    padding:16
+    padding: 16
   },
 });

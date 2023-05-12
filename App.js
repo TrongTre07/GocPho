@@ -48,7 +48,8 @@ const App = () => {
   return (
     
     <Provider store={store}>
-        <AppNavigation />
+        {/* <AppNavigation /> */}
+        <Mango/>
     </Provider>
   );
 };
